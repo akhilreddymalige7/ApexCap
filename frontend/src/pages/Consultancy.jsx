@@ -3,6 +3,8 @@ import { Send, CheckCircle, Plus, Calculator, AlertTriangle } from 'lucide-react
 import { AuthContext } from '../context/AuthContext';
 import { Navigate } from 'react-router-dom';
 
+const API = import.meta.env.VITE_API_URL || 'https://apexcap.onrender.com';
+
 const Consultancy = () => {
   const { user, login } = useContext(AuthContext);
   
@@ -16,7 +18,7 @@ const Consultancy = () => {
   const [status, setStatus] = useState('');
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/suggestions')
+    fetch(`${API}/api/suggestions`)
       .then(res => res.json())
       .then(data => setAvailableStocks(data))
       .catch(console.error);
@@ -28,7 +30,7 @@ const Consultancy = () => {
     e.preventDefault();
     setStatus('loading');
     try {
-      const res = await fetch('http://localhost:5000/api/suggestions', {
+      const res = await fetch(`${API}/api/suggestions`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(adminForm)
@@ -36,7 +38,7 @@ const Consultancy = () => {
       if (res.ok) {
         setStatus('admin_success');
         setAdminForm({ symbol: '', name: '', category: 'Swing', action: 'BUY', targetPrice: '', stopLoss: '', rationale: '' });
-        const fresh = await fetch('http://localhost:5000/api/suggestions').then(r => r.json());
+        const fresh = await fetch(`${API}/api/suggestions`).then(r => r.json());
         setAvailableStocks(fresh);
         setTimeout(() => setStatus(''), 3000);
       } else {
@@ -50,7 +52,7 @@ const Consultancy = () => {
     setStatus('loading');
     try {
       const token = localStorage.getItem('token');
-      const res = await fetch('http://localhost:5000/api/auth/portfolio', {
+      const res = await fetch(`${API}/api/auth/portfolio`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
         body: JSON.stringify(userForm)

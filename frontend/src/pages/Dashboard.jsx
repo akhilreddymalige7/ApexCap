@@ -9,9 +9,10 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        const API = import.meta.env.VITE_API_URL || 'https://apexcap.onrender.com';
         const [marketRes, suggestionsRes] = await Promise.all([
-          fetch('http://localhost:5000/api/market'),
-          fetch('http://localhost:5000/api/suggestions')
+          fetch(`${API}/api/market`),
+          fetch(`${API}/api/suggestions`)
         ]);
         
         if (marketRes.ok) setMarketData(await marketRes.json());
