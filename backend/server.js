@@ -9,8 +9,12 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 app.use(cors({
-  origin: [process.env.FRONTEND_URL || 'https://apex-cap.vercel.app', 'http://localhost:5173'],
-  methods: ["GET", "POST", "PUT", "DELETE"],
+  origin: function(origin, callback) {
+    // allow requests with no origin (like mobile apps or curl requests)
+    // or allow all for now to debug
+    callback(null, true);
+  },
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   credentials: true
 }));
 app.use(express.json());
